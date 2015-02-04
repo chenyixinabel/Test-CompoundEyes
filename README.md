@@ -9,4 +9,4 @@ The goal of this project is to evaluate the performance of CompoundEyes on the C
 4. vid\_decomp: Decompose videos into frames, each video corresponds to a set of frames.
 
 ## How to use
-To test CompoundEyes, you should follow these steps:
+To conduct experiments on CompoundEyes, you should follow these steps:
