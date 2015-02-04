@@ -16,16 +16,19 @@ To conduct experiments on CompoundEyes, you should follow these steps:
 4. Conduct other experiments if necessary.
 
 ## Decompose videos into frames
-1. Run decomp.sh to extract key-frames from videos, e.g., ./decomp.sh ~/username/videos/ ~/username/vid\_frames\_all/ jpeg.
-2. Run copy\_missing\_videos.sh to find out which video has been failed in the previous extraction process, then copy these videos into a directory. For example, ./copy\_missing\_videos.sh ~/username/vid\_frames\_all/ ~/username/videos/ ~/username/missing/.
-3. Delete the empty video directories in ~/username/vid\_frames\_all.
-4. Run decomp.sh to extract key-frames from videos failed in the last round of extraction, e.g., ./decomp.sh ~/username/missing/ ~/username/vid\_frames\_all/ jpeg. Step 2 to 4 could last for several rounds until all the videos have at least one key-frame extracted.
-5. The optical flow feature extractor requires at least two frames to calculate a flow, thus we need to ensure that each video has at least two frames extracted. Run count\_file\_num.sh to find out which video has only one key-frame extracted and copy these video into a directory. For example, ./count\_file\_num.sh ~/username/vid\_frames\_all/ 1 ~/username/redecomp/ ~/username/videos/.
-6. Delete the video directories in ~/username/vid\_frames\_all which have only one key-frame extracted.
-7. Run new\_decomp.sh to extract frames from videos which have only one key-frame extracted. This script extracts frames according to frame rate. It should run as, ./new\_decomp.sh ~/username/redecomp/ ~/username/vid\_frames\_all/ jpeg. Step 5 to 7 should also be iterated for several rounds until all the videos have at least two frames extracted.
-8. Group the video directories in ~/username/vid\_frames\_all into 24 groups, e.g., vid\_1\_frames, vid\_2\_frames, etc.
+1. Run decomp.sh to extract key-frames from videos, e.g., ./decomp.sh /home/username/videos/ /home/username/vid\_frames\_all/ jpeg.
+2. Run copy\_missing\_videos.sh to find out which video has been failed in the previous extraction process, then copy these videos into a directory. For example, ./copy\_missing\_videos.sh /home/username/vid\_frames\_all/ /home/username/videos/ /home/username/missing/.
+3. Delete the empty video directories in /home/username/vid\_frames\_all.
+4. Run decomp.sh to extract key-frames from videos failed in the last round of extraction, e.g., ./decomp.sh /home/username/missing/ /home/username/vid\_frames\_all/ jpeg. Step 2 to 4 could last for several rounds until all the videos have at least one key-frame extracted.
+5. The optical flow feature extractor requires at least two frames to calculate a flow, thus we need to ensure that each video has at least two frames extracted. Run count\_file\_num.sh to find out which video has only one key-frame extracted and copy these video into a directory. For example, ./count\_file\_num.sh /home/username/vid\_frames\_all/ 1 /home/username/redecomp/ /home/username/videos/.
+6. Delete the video directories in /home/username/vid\_frames\_all which have only one key-frame extracted.
+7. Run new\_decomp.sh to extract frames from videos which have only one key-frame extracted. This script extracts frames according to frame rate. It should run as, ./new\_decomp.sh /home/username/redecomp/ /home/username/vid\_frames\_all/ jpeg. Step 5 to 7 should also be iterated for several rounds until all the videos have at least two frames extracted.
+8. Group the video directories in /home/username/vid\_frames\_all into 24 groups, e.g., vid\_1\_frames, vid\_2\_frames, etc.
 
 ## Divide videos into a training set and a testing set
+1. Be sure that partial\_video\_names\_generator.sh is in the same directory with Input\_setup.py.
+2. Run Input\_setup.py to separate decomposed videos into a training set and a testing set, e.g., python Input\_setup.py /home/username/dataset(where you are going to store the generated dataset of videos) /home/username/vid\_frames\_all 0.1(the quantity of videos selected for evaluation) 0.5(the portion of the training set in the selected videos)
+3. When step 2 finishes, there will generate a dataset in /home/username/dataset, Test\_s\_0.1\_p\_0.5, if the arguments to Inputy\_setup.py are the same as the example in step 2.
 
 ## Run the program of CompoundEyes, calculate the detection results, and evaluate performance
 
