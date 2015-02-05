@@ -52,6 +52,13 @@ Having finished the experiments of CompoundEyes mentioned above, results are sca
 3. Run test/mat2xlsx.m to facilitate charting on the evaluation results. This could be done by calling mat2xlsx('/home/username/test/results', 'results\_s\_1d0\_p\_0d5', {'avg\_ac\_mat', 'avg\_map\_mat', 'all\_time', 'avg\_\all\_time', 'avg\_pre\_proc\_time', 'avg\_proc\_time'}) in Matlab.
 
 ## The Effect of different combinations of feature extractors
+Due to the flexibility of CompoundEyes, we could theoretically employ an arbitrary number of feature extractors. At this phase, seven feature extractors have been implemented. We are curious about the performance of different combinations of them, in terms of accuracy and detection speed.
+
+With the results produced by previous experiments, we could evaluate the accuracy of all the possible combinations as follows:
+1. Change the configurations in combination\_test.m, all\_det\_num = 7, category\_num = 24, all\_data\_path = '/home/username/dataset/Test\_s\_1.0\_p\_0.5', all\_save\_path = '/home/username/Test\_combine/', save\_file\_name = 'combine\_s\_1d0\_p\_0d5.mat', save\_loc = '/home/username/test/combine\_results/'. Make sure that these directories exist.
+2. Run combination\_test.m in Matlab.
+
+After the evaluation of all the possible combinations, we are aware of the best combinations given the number of feature extractors. Next, we want to the detection speed of these combinations. This could be done by the following steps:
 
 ## The Effect of r and k
 
