@@ -41,7 +41,14 @@ Suppose the programs of CompoundEyes are in /home/username/workspace/, datasets 
 3. The first one is similar to the example above, constructing dataset first, then running the program by ./batch\_classification\_parallel.sh /home/username/workspace/Hist\_Nest\_new/Debug/ /home/username/dataset/Test\_s\_0.1\_p\_0.5/.
 4. The second one contains two bundles of experiments. In the first bundle, all the videos are included in the experiments, and the portion of the training set varies from 90% to 10%. In the second bundle, the portion of the training set stays at 50%, and the amount of videos included varies from 90% to 10%.
 5. To start these experiments, we only need to enter ./expe\_instances.sh /home/usrname/workspace/Vid\_Input\_Setup /home/username (this is where the directory vid\_frames\_all is) /home/username/workspace/Test-CompoundEyes/test (this is where the batch\_classification\_parallel.sh is) /home/username/workspace/Hist\_Nest\_parallel/Debug.
+6. Notice that before running these experiments, we need to make sure that all the intermediary result files, located in /home/username/workspace/Hist\_Nest\_(new or parallel)/Label files (this location is configured in a source file of CompoundEyes), /home/username/workspace/Hist\_Nest\_(new or parallel)/Debug/results.txt have been deleted, so are the configure files for Nest, located in /home/username/workspace/Hist\_Nest\_(new or parallel)/src/Nest, except nest.conf.
 
 ## How to calculate the detection results, and evaluate performance
+
+Having finished the experiments of CompoundEyes mentioned above, results are scattered in directories as /home/username/dataset/your-dataset/Test\_v1(from 1 to 24)/inter\_save. Suppose our dataset is Test\_s\_1.0\_p\_0.5, to obtain the final results and evaluate the performance, in terms of accuracy and efficiency, we should follow these steps:
+
+1. In bks\_alg/bks\_combine.m, configure save\_loc, detector\_num, category\_num, data\_loc, and save\_file\_name accordingly. For instance, save\_loc = '/home/username/test/results/', detector\_num = 7, category\_num = 24, data\_loc = '/home/username/dataset/Test\_s\_1.0\_p\_0.5/', save\_file\_name = 'results\_s\_1d0\_p\_0d5.mat'.
+2. Run bks\_combine.m in Matlab.
+3. Run test/mat2xlsx.m to facilitate charting on the evaluation results. This could be done by calling mat2xlsx('/home/username/test/results', 'results\_s\_1d0\_p\_0d5', {'avg\_ac\_mat', 'avg\_map\_mat', 'all\_time', 'avg\_\all\_time', 'avg\_pre\_proc\_time', 'avg\_proc\_time'}) in Matlab.
 
 ## Conduct other experiments if necessary
