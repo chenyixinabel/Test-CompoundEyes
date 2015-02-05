@@ -13,7 +13,7 @@ To conduct experiments on CompoundEyes, you should follow these steps:
 1. Decompose videos into frames.
 2. Divide videos into a training set and a testing set.
 3. Run the program of CompoundEyes, calculate the detection results, and evaluate performance.
-4. Conduct other experiments if necessary.
+4. Conduct other experiments if necessary, including evaluating the effect of different combinations of feature extractors, the effect of r and k, and the performance when the number of threads changes.
 
 ## Decompose videos into frames
 1. Run decomp.sh to extract key-frames from videos, e.g., ./decomp.sh /home/username/videos/ /home/username/vid\_frames\_all/ jpeg.
@@ -51,4 +51,8 @@ Having finished the experiments of CompoundEyes mentioned above, results are sca
 2. Run bks\_combine.m in Matlab.
 3. Run test/mat2xlsx.m to facilitate charting on the evaluation results. This could be done by calling mat2xlsx('/home/username/test/results', 'results\_s\_1d0\_p\_0d5', {'avg\_ac\_mat', 'avg\_map\_mat', 'all\_time', 'avg\_\all\_time', 'avg\_pre\_proc\_time', 'avg\_proc\_time'}) in Matlab.
 
-## Conduct other experiments if necessary
+## The Effect of different combinations of feature extractors
+
+## The Effect of r and k
+
+## The performance variation when the number of threads changes
