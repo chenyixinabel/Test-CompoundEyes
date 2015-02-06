@@ -61,8 +61,10 @@ With the results produced by previous experiments, we could evaluate the accurac
 4. Change the configurations in combination\_test\_xlsx.m, data\_loc = '/home/username/test/combine\_results/', result\_name = 'combine\_s\_1d0\_p\_0d5'.
 5. Run combination\_test\_xlsx.m in Matlab.
 
-After the evaluation of all the possible combinations, we are aware of the best combinations given the number of feature extractors. Next, we want to the detection speed of these combinations. This could be done by the following steps:
-1.  
+After the evaluation of all the possible combinations, we are aware of the best combinations given the number of feature extractors. Next, we want to the detection speed of these combinations. Suppose all the projects of CompoundEyes with different combinations of feature extractors have been built and located in /home/username/workspace/, and their names are in the form of Hist\_Nest\_parallel\_1 (from 1 to 6, indicates the number of feature extractors included). This could be done by the following steps:
+1. Run ./batch\_classification\_parallel\_num.sh /home/username/workspace/ /home/username/dataset/Test\_s\_1.0\_p\_0.5/ /home/username/test/combine\_results
+2. Change the configurations in bks\_combine.m, save\_loc = '/home/username/test/combine\_results/', detector\_num = 1 (from 1 to 6), data\_loc = '/home/username/test/combine\_results/best\_comb\_test/1\_Test/' (from 1\_Test to 6\_Test).
+3. Run bks\_combine.m in Matlab.
 
 ## The Effect of r and k
 
