@@ -1,10 +1,16 @@
 function [avg_ac,plus_ac,minus_ac,avg_map,plus_map,minus_map,max_ac_idx,min_ac_idx,max_map_idx,min_map_idx] = combine_setup(all_det_num, det_num,...
     category_num, all_data_path, all_save_path)
+    %all_det_num = 7;
     count_range = 1:all_det_num;
+    %det_num = 2; % The number of detectors been reduced
     count_mat = int16(combnk(count_range, det_num));
+    %category_num = 24;
 
     all_ac_mat = zeros(size(count_mat,1),1);
     all_map_mat = zeros(size(count_mat,1),1);
+
+    %all_data_path = '~/tmp/Test_s_1.0_p_0.5'; % Do not end with '/' %
+    %all_save_path = '~/tmp/Test_combine/';
 
     locs = strfind(all_data_path, '/');
     folder_name = all_data_path(locs(end)+1:end);
