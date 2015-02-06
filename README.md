@@ -55,10 +55,14 @@ Having finished the experiments of CompoundEyes mentioned above, results are sca
 Due to the flexibility of CompoundEyes, we could theoretically employ an arbitrary number of feature extractors. At this phase, seven feature extractors have been implemented. We are curious about the performance of different combinations of them, in terms of accuracy and detection speed.
 
 With the results produced by previous experiments, we could evaluate the accuracy of all the possible combinations as follows:
-1. Change the configurations in combination\_test.m, all\_det\_num = 7, category\_num = 24, all\_data\_path = '/home/username/dataset/Test\_s\_1.0\_p\_0.5', all\_save\_path = '/home/username/Test\_combine/', save\_file\_name = 'combine\_s\_1d0\_p\_0d5.mat', save\_loc = '/home/username/test/combine\_results/'. Make sure that these directories exist.
-2. Run combination\_test.m in Matlab.
+1. Copy the results produced by CompoundEyes in the last section to a temporary location, for example, /home/username/tmp.
+2. Change the configurations in combination\_test.m, all\_data\_path = '/home/username/tmp/Test\_s\_1.0\_p\_0.5', all\_save\_path = '/home/username/tmp/Test\_combine/', save\_file\_name = 'combine\_s\_1d0\_p\_0d5.mat', save\_loc = '/home/username/test/combine\_results/'. Make sure that these directories exist.
+3. Run combination\_test.m in Matlab.
+4. Change the configurations in combination\_test\_xlsx.m, data\_loc = '/home/username/test/combine\_results/', result\_name = 'combine\_s\_1d0\_p\_0d5'.
+5. Run combination\_test\_xlsx.m in Matlab.
 
 After the evaluation of all the possible combinations, we are aware of the best combinations given the number of feature extractors. Next, we want to the detection speed of these combinations. This could be done by the following steps:
+1.  
 
 ## The Effect of r and k
 
