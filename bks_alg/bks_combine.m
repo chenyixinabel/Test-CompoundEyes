@@ -1,10 +1,10 @@
 %data_loc = '~/dataset/Test_s_1.0_p_0.5/';
-save_loc = '~/Dropbox/MyProject/Code_Data/matlab/';
+save_loc = '~/dataset/CC_WEB_VIDEO/results/';
 detector_num = 7;
 category_num = 24;
-data_loc = '~/results/Test_r_k/Test_r_0_k_16/';
+data_loc = '~/dataset/CC_WEB_VIDEO/Test_s_0.1_p_0.5/';
 %save_loc = 'e:\Dropbox\MyProject\Code_Data\matlab\';
-save_file_name = 'r_0_k_16.mat';
+save_file_name = 's_0.1_p_0.5.mat';
 save_cmd = strcat('save(','''',save_loc,save_file_name,'''',',','''','ac_mat','''',',','''','map_mat','''',',',...
     '''','prec_mat','''',',','''','rec_mat','''',',','''','fs_mat','''',',','''','instance_nums','''',',',...
     '''','avg_stage_times','''',',','''','all_time','''',',','''','avg_all_time','''',',','''','avg_pre_proc_time',...
