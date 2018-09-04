@@ -1,4 +1,5 @@
 import os, sys, math, random
+import argparse
 
 def setup_folders(dataset_folder_path, frame_folder_path, folder_count, dataset_ratio, train_set_ratio):
     create_outer_folder_cmd = "mkdir " + dataset_folder_path + "/Test_v" + str(folder_count)
@@ -150,10 +151,25 @@ def input_path_form_check(path):
     return ret_path
 
 if __name__ == '__main__':
-    dataset_folder_path = input_path_form_check(sys.argv[1])
-    frames_folder_path = input_path_form_check(sys.argv[2])
-    dataset_ratio = float(sys.argv[3])
-    train_set_ratio = float(sys.argv[4])
+#    dataset_folder_path = input_path_form_check(sys.argv[1])
+#    frames_folder_path = input_path_form_check(sys.argv[2])
+#    dataset_ratio = float(sys.argv[3])
+#    train_set_ratio = float(sys.argv[4])
+    parser = argparse.ArgumentParser()
+    # e.g., /home/yixin/dataset/CC_WEB_VIDEO #
+    parser.add_argument('dataset_folder_path', help='The path to the location of output directory.')
+    # e.g., /home/yixin/dataset/CC_WEB_VIDEO/vid_frames_all #
+    parser.add_argument('frames_folder_path', help='The path to the directory of all video frames.')
+    # e.g., 0.1 #
+    parser.add_argument('dataset_ratio', type=float, help='The ratio of the selected dataset to the original dataset.')
+    # e.g., 0.5 #
+    parser.add_argument('train_set_ratio', type=float, help='The ratio of the training set to the selected dataset.')
+    args = parser.parse_args()
+    dataset_folder_path = input_path_form_check(args.dataset_folder_path)
+    frames_folder_path = input_path_form_check(args.frames_folder_path)
+    dataset_ratio = args.dataset_ratio
+    train_set_ratio = args.train_set_ratio
+
     query_num = 24
      
     for i in range(query_num):
