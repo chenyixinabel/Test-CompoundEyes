@@ -29,6 +29,8 @@ def setup_folders(dataset_folder_path, frame_folder_path, folder_count, dataset_
     output_vid_folder = dataset_folder_path + "/Test_v" + str(folder_count) + "/"
     
     prepare_video_sets(groundtruth_folder, input_vid_folder, output_vid_folder, folder_count);
+
+    return
     
 def prepare_groundtruth(videos_path, groundtruth_files, video_name_list, video_list_all, seed_file, train_set_ratio, output_folder_path, folder_count, dataset_ratio):
     path = os.path.dirname(videos_path)
@@ -66,6 +68,8 @@ def prepare_groundtruth(videos_path, groundtruth_files, video_name_list, video_l
     with open(test_set_output_path, "w") as test_set_output_fd:
         for item in test_set:
             test_set_output_fd.write("%d %s %s\n" % (int(item[0]), item[1], item[2]))
+
+    return
     
 def prepare_video_sets(groundtruth_folder, input_vid_folder, output_vid_folder, folder_count):
     train_gt_file_name = groundtruth_folder + "GT_new_" + str(folder_count) + "_train.txt"
@@ -99,6 +103,8 @@ def prepare_video_sets(groundtruth_folder, input_vid_folder, output_vid_folder, 
         video_folder_path = input_vid_folder + video_folder
         move_video_folder_cmd = "mv " + video_folder_path + " " + test_video_output_path
         os.system(move_video_folder_cmd)
+
+    return
         
     
 def GT(gt_file_name, vid_list_file_name, seed_file, gt_file_count, video_source):
@@ -143,21 +149,22 @@ def input_path_form_check(path):
     ret_path = os.path.abspath(path)
     return ret_path
 
-dataset_folder_path = input_path_form_check(sys.argv[1])
-frames_folder_path = input_path_form_check(sys.argv[2])
-dataset_ratio = float(sys.argv[3])
-train_set_ratio = float(sys.argv[4])
-query_num = 24
- 
-for i in range(query_num):
-    setup_folders(dataset_folder_path, frames_folder_path, i+1, dataset_ratio, train_set_ratio)
+if __name__ == '__main__':
+    dataset_folder_path = input_path_form_check(sys.argv[1])
+    frames_folder_path = input_path_form_check(sys.argv[2])
+    dataset_ratio = float(sys.argv[3])
+    train_set_ratio = float(sys.argv[4])
+    query_num = 24
      
-wrapper_folder = dataset_folder_path + "/Test_s_" + str(dataset_ratio) + "_p_" + str(train_set_ratio) + "/"
-mk_wrapper_folder_cmd = "mkdir " + wrapper_folder
-chmod_wrapper_folder_cmd = "chmod -R 777 " + wrapper_folder
-os.system(mk_wrapper_folder_cmd)
-os.system(chmod_wrapper_folder_cmd)
- 
-for i in range(query_num):
-    move_folder_cmd = "mv " + dataset_folder_path + "/Test_v" + str(i+1) + "/ " + wrapper_folder
-    os.system(move_folder_cmd)
+    for i in range(query_num):
+        setup_folders(dataset_folder_path, frames_folder_path, i+1, dataset_ratio, train_set_ratio)
+         
+    wrapper_folder = dataset_folder_path + "/Test_s_" + str(dataset_ratio) + "_p_" + str(train_set_ratio) + "/"
+    mk_wrapper_folder_cmd = "mkdir " + wrapper_folder
+    chmod_wrapper_folder_cmd = "chmod -R 777 " + wrapper_folder
+    os.system(mk_wrapper_folder_cmd)
+    os.system(chmod_wrapper_folder_cmd)
+     
+    for i in range(query_num):
+        move_folder_cmd = "mv " + dataset_folder_path + "/Test_v" + str(i+1) + "/ " + wrapper_folder
+        os.system(move_folder_cmd)
