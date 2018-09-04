@@ -1,7 +1,7 @@
 import os, sys, math, random
-import argparse
+import argparse, pickle
 
-def setup_folders(dataset_folder_path, frame_folder_path, folder_count, dataset_ratio, train_set_ratio):
+def setup_folders(dataset_folder_path, frame_folder_path, folder_count, dataset_ratio, train_set_ratio, vector_dir_path=None):
     create_outer_folder_cmd = "mkdir " + dataset_folder_path + "/Test_v" + str(folder_count)
     outer_folder_chmod_cmd = "chmod -R 777 " + dataset_folder_path + "/Test_v" + str(folder_count)
     create_inner_folder_cmd = create_outer_folder_cmd + "/groundtruth"
@@ -23,7 +23,7 @@ def setup_folders(dataset_folder_path, frame_folder_path, folder_count, dataset_
     video_list_all = dataset_folder_path + "/Video_List_simple.txt"
     seed_file = dataset_folder_path + "/Seed.txt"
     
-    prepare_groundtruth(videos_path, groundtruth_files, video_name_list, video_list_all, seed_file, train_set_ratio, output_folder_path, folder_count, dataset_ratio)
+    prepare_groundtruth(videos_path, groundtruth_files, video_name_list, video_list_all, seed_file, train_set_ratio, output_folder_path, folder_count, dataset_ratio, vector_dir_path)
     
     groundtruth_folder = output_folder_path + "/"
     input_vid_folder = dataset_folder_path + "/Test_v" + str(folder_count) + "/vid_" + str(folder_count) + "_frames/"
@@ -33,7 +33,7 @@ def setup_folders(dataset_folder_path, frame_folder_path, folder_count, dataset_
 
     return
     
-def prepare_groundtruth(videos_path, groundtruth_files, video_name_list, video_list_all, seed_file, train_set_ratio, output_folder_path, folder_count, dataset_ratio):
+def prepare_groundtruth(videos_path, groundtruth_files, video_name_list, video_list_all, seed_file, train_set_ratio, output_folder_path, folder_count, dataset_ratio, vector_dir_path):
     path = os.path.dirname(videos_path)
     
     if os.path.exists(path):
@@ -47,19 +47,35 @@ def prepare_groundtruth(videos_path, groundtruth_files, video_name_list, video_l
     groundtruth_file = groundtruth_files + '/GT_' + str(folder_count) + '.rst'
     groundTruth, _ = GT(groundtruth_file, video_list_all, seed_file, folder_count, source)
     
-    video_name_size = len(groundTruth)
-    if dataset_ratio == 1:
-        train_set_size = int(math.floor(video_name_size*train_set_ratio))
-        train_set_idx = sorted(random.sample(range(video_name_size), train_set_size))
-        test_set_idx = sorted(list(set(range(video_name_size)) - set(train_set_idx)))
+    if vector_dir_path == None:
+        video_name_size = len(groundTruth)
+        if dataset_ratio == 1:
+            train_set_size = int(math.floor(video_name_size*train_set_ratio))
+            train_set_idx = sorted(random.sample(range(video_name_size), train_set_size))
+            test_set_idx = sorted(list(set(range(video_name_size)) - set(train_set_idx)))
+        else:
+            dataset_size = int(math.floor(video_name_size*dataset_ratio))
+            train_set_size = int(math.floor(dataset_size*train_set_ratio))
+            dataset_idx = random.sample(range(video_name_size), dataset_size)
+            train_set_idx = sorted(dataset_idx[0:train_set_size])
+            test_set_idx = sorted(dataset_idx[train_set_size:dataset_size])
+        train_set = [groundTruth[i] for i in train_set_idx]
+        test_set = [groundTruth[i] for i in test_set_idx]
     else:
-        dataset_size = int(math.floor(video_name_size*dataset_ratio))
-        train_set_size = int(math.floor(dataset_size*train_set_ratio))
-        dataset_idx = random.sample(range(video_name_size), dataset_size)
-        train_set_idx = sorted(dataset_idx[0:train_set_size])
-        test_set_idx = sorted(dataset_idx[train_set_size:dataset_size])
-    train_set = [groundTruth[i] for i in train_set_idx]
-    test_set = [groundTruth[i] for i in test_set_idx]
+        trn_vnames, test_vnames, _ = vname_reader(vector_dir_path, folder_count)
+        gt_pos_dict = {}
+        train_set = []
+        test_set = []
+        for pos, item in enumerate(groundTruth):
+            gt_pos_dict[item[2]] = pos
+        trn_vnames = sorted(trn_vnames, key=lambda x:int(x.split('_')[1]))
+        test_vnames = sorted(test_vnames, key=lambda x:int(x.split('_')[1]))
+        for name in trn_vnames:
+            pos = gt_pos_dict[name]
+            train_set.append(groundTruth[pos])
+        for name in test_vnames:
+            pos = gt_pos_dict[name]
+            test_set.append(groundTruth[pos])
             
     train_set_output_path = output_folder_path + "/GT_new_" + str(folder_count) + "_train.txt"
     test_set_output_path = output_folder_path + "/GT_new_" + str(folder_count) + "_test.txt"
@@ -150,11 +166,23 @@ def input_path_form_check(path):
     ret_path = os.path.abspath(path)
     return ret_path
 
+def vname_reader(dir_path, folder_count):
+    vname_dict = {}
+    seed_dict_path = dir_path + '/seed_vnamevgg16_dict'
+    
+    trn_vname_vec_dict_path = dir_path + '/train-vgg16/train_vname_vgg16_dict_' + str(folder_count)
+    test_vname_vec_dict_path = dir_path + '/test-vgg16/test_vname_vgg16_dict_' + str(folder_count)
+    trn_vname_vec_dict = pickle.load(open(trn_vname_vec_dict_path, 'r'))
+    test_vname_vec_dict = pickle.load(open(test_vname_vec_dict_path, 'r'))
+    trn_vnames = trn_vname_vec_dict.keys()
+    test_vnames = test_vname_vec_dict.keys()
+        
+    seed_dict = pickle.load(open(seed_dict_path, 'r'))
+    seeds = sorted(seed_dict.keys(), key=lambda x:int(x.split('_')[0]))
+    
+    return trn_vnames, test_vnames, seeds
+
 if __name__ == '__main__':
-#    dataset_folder_path = input_path_form_check(sys.argv[1])
-#    frames_folder_path = input_path_form_check(sys.argv[2])
-#    dataset_ratio = float(sys.argv[3])
-#    train_set_ratio = float(sys.argv[4])
     parser = argparse.ArgumentParser()
     # e.g., /home/yixin/dataset/CC_WEB_VIDEO #
     parser.add_argument('dataset_folder_path', help='The path to the location of output directory.')
@@ -164,7 +192,10 @@ if __name__ == '__main__':
     parser.add_argument('dataset_ratio', type=float, help='The ratio of the selected dataset to the original dataset.')
     # e.g., 0.5 #
     parser.add_argument('train_set_ratio', type=float, help='The ratio of the training set to the selected dataset.')
+    # e.g., /home/yixin/dataset/CC_WEB_VIDEO/feature_vectors/vgg16-vec #
+    parser.add_argument('-v', help='The path to the directory of the extracted feature vectors.')
     args = parser.parse_args()
+
     dataset_folder_path = input_path_form_check(args.dataset_folder_path)
     frames_folder_path = input_path_form_check(args.frames_folder_path)
     dataset_ratio = args.dataset_ratio
@@ -173,7 +204,10 @@ if __name__ == '__main__':
     query_num = 24
      
     for i in range(query_num):
-        setup_folders(dataset_folder_path, frames_folder_path, i+1, dataset_ratio, train_set_ratio)
+        if args.v == None:
+            setup_folders(dataset_folder_path, frames_folder_path, i+1, dataset_ratio, train_set_ratio)
+        else:
+            setup_folders(dataset_folder_path, frames_folder_path, i+1, dataset_ratio, train_set_ratio, input_path_form_check(args.v))
          
     wrapper_folder = dataset_folder_path + "/Test_s_" + str(dataset_ratio) + "_p_" + str(train_set_ratio) + "/"
     mk_wrapper_folder_cmd = "mkdir " + wrapper_folder

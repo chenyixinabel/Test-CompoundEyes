@@ -29,6 +29,7 @@ To conduct experiments on CompoundEyes, you should follow these steps:
 1. Be sure that partial\_video\_names\_generator.sh is in the same directory with Input\_setup.py.
 2. Run Input\_setup.py to separate decomposed videos into a training set and a testing set, e.g., python Input\_setup.py /home/username/dataset(where you are going to store the generated dataset of videos) /home/username/vid\_frames\_all 0.1(the quantity of videos selected for evaluation) 0.5(the portion of the training set in the selected videos)
 3. When step 2 finishes, there will generate a dataset in /home/username/dataset, Test\_s\_0.1\_p\_0.5, if the arguments to Inputy\_setup.py are the same as the example in step 2.
+4. For the feature vectors extracted in CC\_WEB\_VIDEO/feature_vectors, we can rebuild the dataset by adding the '-v' option, which is followed by the location where the vector stored, such as /home/yixin/dataset/CC\_WEB\_VIDEO/feature\_vectors/vgg16-vec.
 
 ## How to run the program of CompoundEyes
 
